@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+</head>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: #ccc;
+    }
+    
+    form {
+        width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+    
+    div {
+        margin-bottom: 15px;
+    }
+    
+    .input1 {
+        width: 100%;
+        padding: 10px;
+        font-size: 1em;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+    }
+    
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1em;
+        font-weight: bold;
+        color: #fff;
+        background-color: #00b368;
+        border: none;
+        border-radius: 4px;
+    }
+    
+    .btn2 {
+        background-color: #6c757d;
+        margin-top: 10px;
+    }
+</style>
+
+<body>
+    <form id="signupForm">
+        <h1>회원가입</h1>
+        <div>
+            email:
+            <input type="email" id="signupEmail" required class="input1" />
+        </div>
+        <div>
+            password:
+            <input type="password" id="signUpPassword" required class="input1" />
+        </div>
+        <button id="signupButton" type="button">
+        회원가입
+      </button>
+        <button type="button" class="btn2" onclick="document.getElementById('signinForm').scrollIntoView();">
+        로그인
+      </button>
+    </form>
+
+    <form id="signinForm">
+        <h1>로그인</h1>
+        <div>
+            email:
+            <input type="email" id="signInEmail" required class="input1" />
+        </div>
+        <div>
+            password:
+            <input type="password" id="signInPassword" required class="input1" />
+        </div>
+        <button id="signInButton" type="button">
+        로그인
+      </button>
+        <button type="button" class="btn2" onclick="document.getElementById('signupForm').scrollIntoView();">
+        회원가입
+      </button>
+    </form>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js"; import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"; import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js"; const firebaseConfig = { apiKey: "AIzaSyCRQTfuEvRgGffWE9LprXM0TzoxvKZWMd0", authDomain: "likelion-pr.firebaseapp.com", projectId: "likelion-pr", storageBucket: "likelion-pr.firebasestorage.app",
+        messagingSenderId: "971962545230", appId: "1:971962545230:web:53f3d4f497f2514b8f7f1f", measurementId: "G-JSH25JNVYC", }; const app = initializeApp(firebaseConfig); const analytics = getAnalytics(app); const auth = getAuth(app); document .getElementById("signupButton")
+        .addEventListener("click", async (event) => { event.preventDefault(); const email = document.getElementById("signupEmail").value.trim(); const password = document.getElementById("signUpPassword").value; if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        { alert("유효한 이메일 주소를 입력하세요."); return; } try { const userCredential = await createUserWithEmailAndPassword( auth, email, password ); const user = userCredential.user; console.log("회원가입 성공:", user); } catch (error) { console.error("회원가입 오류:", error.code,
+        error.message); alert("회원가입 중 오류가 발생했습니다: " + error.message); } }); document .getElementById("signInButton") .addEventListener("click", async (event) => { event.preventDefault(); const email = document.getElementById("signInEmail").value.trim();
+        const password = document.getElementById("signInPassword").value; if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert("유효한 이메일 주소를 입력하세요."); return; } try { const userCredential = await signInWithEmailAndPassword( auth, email, password
+        ); const user = userCredential.user; console.log("로그인 성공:", user); } catch (error) { console.error("로그인 오류:", error.code, error.message); alert("로그인 중 오류가 발생했습니다: " + error.message); } });
+    </script>
+</body>
+
+</html>
