@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form>
+      <h1>회원가입</h1>
+      <div>email: <input type="email" id="signupEmail" required /></div>
+      <div>
+        password: <input type="password" id="signUpPassword" required />
+      </div>
+      <button id="signupButton" type="submit">회원가입</button>
+      <button type="button">로그인</button>
+    </form>
+    <form>
+      <h1>로그인</h1>
+      <div>email: <input type="email" id="signInEmail" required /></div>
+      <div>
+        password: <input type="password" id="signInPassword" required />
+      </div>
+      <button id="signInButton" type="submit">로그인</button>
+      <button type="button">회원가입</button>
+    </form>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBk4gkG3-rV3Ioj4s6IABw-1VQoNX-rUBs",
+        authDomain: "easylogin2-f4372.firebaseapp.com",
+        projectId: "easylogin2-f4372",
+        storageBucket: "easylogin2-f4372.firebasestorage.app",
+        messagingSenderId: "672394772833",
+        appId: "1:672394772833:web:7feffae71502811ce3c520",
+        measurementId: "G-F92RPLPZPT",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+
+      // 회원가입 버튼 클릭
+      document
+        .getElementById("signupButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("signupEmail").value.trim();
+          const password = document.getElementById("signUpPassword").value;
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            return;
+          }
+
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("회원가입 성공:", user);
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("회원가입 오류:", errorCode, errorMessage);
+              alert("회원가입 중 오류가 발생했습니다: " + errorMessage);
+            });
+        });
+      document
+        .getElementById("signInButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("signInEmail").value.trim();
+          const password = document.getElementById("signInPassword").value;
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            return;
+          }
+
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("로그인 성공:", user);
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("로그인 오류:", errorCode, errorMessage);
+              alert("로그인 중 오류가 발생했습니다: " + errorMessage);
+            });
+        });
+    </script>
+  </body>
+</html>
