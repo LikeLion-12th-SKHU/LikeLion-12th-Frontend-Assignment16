@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f7f7f7;
+      }
+
+      form {
+        background-color: #ffffff;
+        width: 400px;
+        padding: 20px;
+        border-radius: 6px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin: 8px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+      }
+
+      input {
+        padding: 8px;
+        width: 300px;
+        border: none;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+
+      input:focus {
+        outline: 1px solid #a0a0a0;
+      }
+
+      button {
+        padding: 10px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-bottom: 8px;
+      }
+
+      #signupButton,
+      #signInButton {
+        height: 40px;
+        width: 315px;
+        background-color: #4698f1;
+        color: #ffffff;
+      }
+
+      #signupButton:hover,
+      #signInButton:hover {
+        background-color: #4587ce;
+      }
+
+      .noneButton {
+        background-color: white;
+        text-decoration: underline;
+        color: #9d9d9d;
+      }
+
+      .noneButton:hover {
+        color: #4d4b4b;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <h1>회원가입</h1>
+      <div>
+        <div>
+          <div>
+            <input type="email" id="signupEmail" required placeholder="email" />
+          </div>
+          <div>
+            <input
+              type="password"
+              id="signUpPassword"
+              required
+              placeholder="password"
+            />
+          </div>
+        </div>
+      </div>
+      <div>
+        <button id="signupButton" type="submit">회원가입</button>
+      </div>
+      <div>
+        <button type="button" class="noneButton">로그인</button>
+      </div>
+    </form>
+    <form>
+      <h1>로그인</h1>
+      <div>
+        <input type="email" id="signInEmail" required placeholder="email" />
+      </div>
+      <div>
+        <input
+          type="password"
+          id="signInPassword"
+          required
+          placeholder="password"
+        />
+      </div>
+      <div>
+        <button id="signInButton" type="submit">로그인</button>
+      </div>
+      <div>
+        <button type="button" class="noneButton">회원가입</button>
+      </div>
+    </form>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCcDXxRDIkqYj8kwy5_5vg9IaTlJO_Y0tM",
+        authDomain: "likelion-1bf4b.firebaseapp.com",
+        projectId: "likelion-1bf4b",
+        storageBucket: "likelion-1bf4b.firebasestorage.app",
+        messagingSenderId: "987904583081",
+        appId: "1:987904583081:web:0e43e42be90ffbcfe310b8",
+        measurementId: "G-8TRKWX24QJ",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+
+      document
+        .getElementById("signupButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("signupEmail").value.trim();
+          const password = document.getElementById("signUpPassword").value;
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            return;
+          }
+
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("회원가입 성공:", user);
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("회원가입 오류:", errorCode, errorMessage);
+              alert("회원가입 중 오류가 발생했습니다: " + errorMessage);
+            });
+        });
+
+      document
+        .getElementById("signInButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("signInEmail").value.trim();
+          const password = document.getElementById("signInPassword").value;
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            return;
+          }
+
+          signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("로그인 성공:", user);
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("로그인 오류:", errorCode, errorMessage);
+              alert("로그인 중 오류가 발생했습니다: " + errorMessage);
+            });
+        });
+    </script>
+  </body>
+</html>
