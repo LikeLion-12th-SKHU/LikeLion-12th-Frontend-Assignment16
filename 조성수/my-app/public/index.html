@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form>
+      <h1>회원가입</h1>
+      <div>email: <input type="email" id="signupEmail" required /></div>
+      <div>
+        password: <input type="password" id="signUpPassword" required />
+      </div>
+      <button id="signupButton" type="submit">회원가입</button>
+      <button type="button">로그인</button>
+    </form>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDVwZujPIgIKfUBA52dQwjgX1aQgIic3vE",
+        authDomain: "easylogin-c361f.firebaseapp.com",
+        projectId: "easylogin-c361f",
+        storageBucket: "easylogin-c361f.firebasestorage.app",
+        messagingSenderId: "499782455779",
+        appId: "1:499782455779:web:e608c9f95bca73fa7d50d6",
+        measurementId: "G-31ZCVWLJL3",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth(app);
+
+      console.log(app);
+
+      // 회원가입 버튼 클릭
+      document
+        .getElementById("signupButton")
+        .addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const email = document.getElementById("signupEmail").value.trim();
+          const password = document.getElementById("signUpPassword").value;
+
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("유효한 이메일 주소를 입력하세요.");
+            return;
+          }
+
+          createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              console.log("회원가입 성공:", user);
+            })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.error("회원가입 오류:", errorCode, errorMessage);
+              alert("회원가입 중 오류가 발생했습니다: " + errorMessage);
+            });
+        });
+    </script>
+  </body>
+</html>
